@@ -26,7 +26,7 @@ def _configure_logging():
 def _main():
     i = inotify.adapters.Inotify()
 
-    fp = b'/home/akhil/Documents/python/watch/dir'
+    fp = b'/dir'
 
     # clean any locks that exist before init
     try:
@@ -34,7 +34,7 @@ def _main():
     except OSError:
         pass
 
-    i.add_watch(fp)
+    i.add_watch(os.getcwd() + '/' + fp)
 
     try:
         for event in i.event_gen():
