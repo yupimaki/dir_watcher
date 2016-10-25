@@ -2,7 +2,30 @@ import os
 import time
 
 
-def wrapper(watch_path, lock):
+def hexparser(filename, watch_path, lock):
+
+    # Debug
+    print "Handling", filename
+
+    # Do stuff...
+    time.sleep(2)
+
+    # Delete the file being used
+    os.remove(watch_path + '/' + filename)
+
+    # Get files without lock
+    files = os.listdir(watch_path)
+    files = [f for f in files if not f == lock]
+
+    # Exist if dir is empty and return to wrapper
+    if len(files) == 0:
+        return
+
+    # Recursive call to hexparser with lock in place
+    hexparser(files[0], watch_path, lock)
+
+
+def wrapper(filename, watch_path, lock):
 
     files = os.listdir(watch_path)
 
@@ -15,13 +38,8 @@ def wrapper(watch_path, lock):
     # Creating lock file
     open(watch_path + lock, 'w')
 
-    # Do stuff...
-    time.sleep(2)
-
-    # Delete the file being used
-    os.remove(watch_path + '/' + files[0])
+    # Trigger hexparser
+    hexparser(filename, watch_path, lock)
 
     # Remove the lock
     os.remove(watch_path + lock)
-
-    wrapper(watch_path, lock)

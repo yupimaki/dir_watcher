@@ -42,7 +42,7 @@ def _main():
                 (header, type_names, watch_path, filename) = event
                 if "IN_CREATE" in type_names:
                     _LOGGER.info("header=%s | fn=%s | MASK->NAMES=%s | wp=%s", header, filename, type_names, watch_path)
-                    wrapper(watch_path, LOCK_FILE)
+                    wrapper(filename, watch_path, LOCK_FILE)
 
     finally:
         i.remove_watch(fp)
